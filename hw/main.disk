@@ -17,7 +17,9 @@ debug 7 7 7 user user BLOCKS 276 320
 sleep 7 7 7 user user BLOCKS 321 335
 user_sched 7 7 7 user group BLOCKS 336 395
 minion 7 7 7 user user BLOCKS 396 547
-
+field1 7 7 7 user user BLOCKS 548 557
+field2 7 7 7 user user BLOCKS 558 567
+battleship 7 7 7 user user BLOCKS 568 1000
 
 
 
@@ -28,7 +30,7 @@ minion 7 7 7 user user BLOCKS 396 547
 
 
 FS_HEADER_END
-proc_memory 250     // memory allocated for one process
+proc_memory 1000     // memory allocated for one process
 max_proc_count 10   // max count of active processes
 max_fd_count 50     // max count of files open at the same time
 schedule_quantum 100 // instruction count before rescheduling
@@ -133,7 +135,7 @@ The end
 1 143 187      #  write "ccccccccccrrrccrrrcccccccccc" => 187
 1 144 188      #  write "cccccccccbbbccccbbbccccccccc" => 188
 1 145 189      #  write "ccccccccbbbbccccbbbbcccccccc" => 189
-1 146 190      #  write "cBBBBBBBBBBBBBBBBBBBBBBBBBBc" => 190
+1 146 190      #  write "cBgyrbmcwBBBBBBBBBBBBBBBBBBc" => 190
 1 129 191      #  write "cccccccccccccccccccccccccccc" => 191
 1 129 192      #  write "cccccccccccccccccccccccccccc" => 192
 1 129 193      #  write "cccccccccccccccccccccccccccc" => 193
@@ -237,7 +239,7 @@ ccccccccyyrrrrrrrryycccccccc
 ccccccccccrrrccrrrcccccccccc
 cccccccccbbbccccbbbccccccccc
 ccccccccbbbbccccbbbbcccccccc
-cBBBBBBBBBBBBBBBBBBBBBBBBBBc
+cBgyrbmcwBBBBBBBBBBBBBBBBBBc
 3
 0
 8
@@ -543,7 +545,168 @@ c
 0
 
 
+X--X------
+X----X----
+X--X------
+X--------X
+--XXX-----
+X---------
+X---X-----
+----X--X--
+-X--X--X--
+-X--------
+X----X---X
+--X------X
+X-----X--X
+------X---
+------X---
+-XX-------
+---------X
+-XX--X---X
+-----X---X
+-XX------X
+1 133 4        #  write COLOR_WHITE => REG_A
+1 134 10       #  write SYS_CALL_SET_BACKGROUND => REG_D
+1 135 2        #  write OP_SYS_CALL => REG_OP
+0              #  cpu_exec
+1 136 159      #  write "field1" => var:battlefield_path
+1 137 160      #  write "0" => var:battlefield_analysed_counter
+1 138 166      #  write "" => var:ships_cells
+3 29           #  jump lbl:battlefield_analysis
+1 166 167      #  copy var:ships_cells => var:user1_ships_cells
+1 139 159      #  write "field2" => var:battlefield_path
+1 138 166      #  write "" => var:ships_cells
+3 29           #  jump lbl:battlefield_analysis
+1 159 4        #  copy var:battlefield_path => REG_A
+1 140 10       #  write SYS_CALL_OPEN => REG_D
+1 135 2        #  write OP_SYS_CALL => REG_OP
+0              #  cpu_exec
+1 12 163       #  copy REG_RES => var:battlefield_fd
+1 141 161      #  write "1" => var:row_counter
+1 163 4        #  copy var:battlefield_fd => REG_A
+1 161 6        #  copy var:row_counter => REG_B
+1 142 10       #  write SYS_CALL_READ => REG_D
+1 135 2        #  write OP_SYS_CALL => REG_OP
+0              #  cpu_exec
+1 12 164       #  copy REG_RES => var:row
+1 141 162      #  write "1" => var:column_counter
+1 164 4        #  copy var:row => REG_A
+1 162 6        #  copy var:column_counter => REG_B
+1 138 8        #  write "" => REG_C
+1 143 2        #  write OP_GET_COLUMN => REG_OP
+0              #  cpu_exec
+1 12 165       #  copy REG_RES => var:cell
+1 144 4        #  write "X" => REG_A
+1 165 6        #  copy var:cell => REG_B
+1 145 2        #  write OP_CMP_EQ => REG_OP
+0              #  cpu_exec
+6 127          #  jump_err lbl:exit_error
+4 74           #  jump_if lbl:add_ship
+1 162 4        #  copy var:column_counter => REG_A
+1 146 2        #  write OP_INCR => REG_OP
+0              #  cpu_exec
+1 12 162       #  copy REG_RES => var:column_counter
+1 162 4        #  copy var:column_counter => REG_A
+1 147 6        #  write "11" => REG_B
+1 145 2        #  write OP_CMP_EQ => REG_OP
+0              #  cpu_exec
+4 64           #  jump_if lbl:column_loop_end
+3 42           #  jump lbl:column_loop
+1 161 4        #  copy var:row_counter => REG_A
+1 146 2        #  write OP_INCR => REG_OP
+0              #  cpu_exec
+1 12 161       #  copy REG_RES => var:row_counter
+1 161 4        #  copy var:row_counter => REG_A
+1 147 6        #  write "11" => REG_B
+1 145 2        #  write OP_CMP_EQ => REG_OP
+0              #  cpu_exec
+4 93           #  jump_if lbl:row_loop_end
+3 35           #  jump lbl:row_loop
+1 161 4        #  copy var:row_counter => REG_A
+1 162 6        #  copy var:column_counter => REG_B
+1 148 8        #  write "," => REG_C
+1 149 2        #  write OP_CONCAT_WITH => REG_OP
+0              #  cpu_exec
+1 12 169       #  copy REG_RES => var:cell_coordinates
+1 166 4        #  copy var:ships_cells => REG_A
+1 169 6        #  copy var:cell_coordinates => REG_B
+1 138 8        #  write "" => REG_C
+1 149 2        #  write OP_CONCAT_WITH => REG_OP
+0              #  cpu_exec
+1 12 166       #  copy REG_RES => var:ships_cells
+1 166 4        #  copy var:ships_cells => REG_A
+1 150 6        #  write " " => REG_B
+1 138 8        #  write "" => REG_C
+1 149 2        #  write OP_CONCAT_WITH => REG_OP
+0              #  cpu_exec
+1 12 166       #  copy REG_RES => var:ships_cells
+3 54           #  jump lbl:add_ship_end
+1 163 4        #  copy var:battlefield_fd => REG_A
+1 151 10       #  write SYS_CALL_CLOSE => REG_D
+1 135 2        #  write OP_SYS_CALL => REG_OP
+0              #  cpu_exec
+1 160 4        #  copy var:battlefield_analysed_counter => REG_A
+1 141 6        #  write "1" => REG_B
+1 146 2        #  write OP_INCR => REG_OP
+0              #  cpu_exec
+1 12 160       #  copy REG_RES => var:battlefield_analysed_counter
+1 160 4        #  copy var:battlefield_analysed_counter => REG_A
+1 152 6        #  write "2" => REG_B
+1 153 2        #  write OP_CMP_NEQ => REG_OP
+0              #  cpu_exec
+4 25           #  jump_if lbl:second_battlefield
+1 166 168      #  copy var:ships_cells => var:user2_ships_cells
+3 109          #  jump lbl:battlefield_analysis_end
+1 154 4        #  write "Welcome to Battleship game!" => REG_A
+1 155 6        #  write COLOR_NO => REG_B
+1 156 10       #  write SYS_CALL_PRINTLN => REG_D
+1 135 2        #  write OP_SYS_CALL => REG_OP
+0              #  cpu_exec
+1 167 4        #  copy var:user1_ships_cells => REG_A
+1 155 6        #  write COLOR_NO => REG_B
+1 156 10       #  write SYS_CALL_PRINTLN => REG_D
+1 135 2        #  write OP_SYS_CALL => REG_OP
+0              #  cpu_exec
+1 168 4        #  copy var:user2_ships_cells => REG_A
+1 155 6        #  write COLOR_NO => REG_B
+1 156 10       #  write SYS_CALL_PRINTLN => REG_D
+1 135 2        #  write OP_SYS_CALL => REG_OP
+0              #  cpu_exec
+1 157 10       #  write SYS_CALL_EXIT => REG_D
+1 135 2        #  write OP_SYS_CALL => REG_OP
+0              #  cpu_exec
+1 16 4         #  copy REG_ERROR => REG_A
+1 158 6        #  write COLOR_RED => REG_B
+1 156 10       #  write SYS_CALL_PRINTLN => REG_D
+1 135 2        #  write OP_SYS_CALL => REG_OP
+0              #  cpu_exec
+3 124          #  jump lbl:exit
+8
+9
+25
+field1
+0
 
+field2
+4
+1
+7
+15
+X
+8
+2
+11
+,
+17
+ 
+6
+2
+9
+Welcome to Battleship game!
+0
+1
+0
+3
 
 
 
@@ -828,177 +991,6 @@ c
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-FS_HEADER kagu_fs FIRST_USABLE_BLOCK 1021 LAST_USABLE_BLOCK 1500
 
 
 

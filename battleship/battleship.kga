@@ -1,0 +1,168 @@
+// Battleship game in KaguOS Assembly
+
+// Analyze the battlefields
+var battlefield_path
+var battlefield_analysed_counter
+var row_counter
+var column_counter
+var battlefield_fd
+var row
+var cell
+var ships_cells
+var user1_ships_cells
+var user2_ships_cells
+var cell_coordinates
+
+write "field1" to var:battlefield_path
+write 0 to var:battlefield_analysed_counter
+write "" to var:ships_cells
+jump label:battlefield_analysis
+
+label second_battlefield
+copy var:ships_cells to var:user1_ships_cells
+write "field2" to var:battlefield_path
+write "" to var:ships_cells
+jump label:battlefield_analysis
+
+label battlefield_analysis
+    // Open the battlefield file
+    copy var:battlefield_path to REG_A
+    write SYS_CALL_OPEN to REG_D
+    write OP_SYS_CALL to REG_OP
+    cpu_exec
+    copy REG_RES to var:battlefield_fd
+
+    write 1 to var:row_counter
+
+    label row_loop
+        copy var:battlefield_fd to REG_A
+        copy var:row_counter to REG_B
+        write SYS_CALL_READ to REG_D
+        write OP_SYS_CALL to REG_OP
+        cpu_exec
+        copy REG_RES to var:row
+
+        write 1 to var:column_counter
+
+        label column_loop
+            // Get the cell
+            copy var:row to REG_A
+            copy var:column_counter to REG_B
+            write "" to REG_C
+            write OP_GET_COLUMN to REG_OP
+            cpu_exec
+            copy REG_RES to var:cell
+
+            // Check if the cell is a ship
+            write "X" to REG_A
+            copy var:cell to REG_B
+            write OP_CMP_EQ to REG_OP
+            cpu_exec
+            jump_err label:exit_error
+
+            // If it is a ship, add it to the ships_cells
+            jump_if label:add_ship
+            label add_ship_end
+
+            // Increment the column counter
+            copy var:column_counter to REG_A
+            write OP_INCR to REG_OP
+            cpu_exec
+            copy REG_RES to var:column_counter
+
+            // Check if we reached the end of the row
+            copy var:column_counter to REG_A
+            write 11 to REG_B
+            write OP_CMP_EQ to REG_OP
+            cpu_exec
+            jump_if label:column_loop_end
+            jump label:column_loop
+
+        label column_loop_end
+
+        // Increment the row counter
+        copy var:row_counter to REG_A
+        write OP_INCR to REG_OP
+        cpu_exec
+        copy REG_RES to var:row_counter
+
+        // Check if we reached the end of the battlefield
+        copy var:row_counter to REG_A
+        write 11 to REG_B
+        write OP_CMP_EQ to REG_OP
+        cpu_exec
+        jump_if label:row_loop_end
+        jump label:row_loop
+
+    
+    label add_ship
+        // Get the coordinates of the cell
+        copy var:row_counter to REG_A
+        copy var:column_counter to REG_B
+        write "," to REG_C
+        write OP_CONCAT_WITH to REG_OP
+        cpu_exec
+        copy REG_RES to var:cell_coordinates
+
+        // Add the coordinates to the ships_cells
+        copy var:ships_cells to REG_A
+        copy var:cell_coordinates to REG_B
+        write "" to REG_C
+        write OP_CONCAT_WITH to REG_OP
+        cpu_exec
+        copy REG_RES to var:ships_cells
+
+        // Add a space to separate the coordinates
+        copy var:ships_cells to REG_A
+        write " " to REG_B
+        write "" to REG_C
+        write OP_CONCAT_WITH to REG_OP
+        cpu_exec
+        copy REG_RES to var:ships_cells
+
+        jump label:add_ship_end
+
+    label row_loop_end
+        // Close the battlefield file
+        copy var:battlefield_fd to REG_A
+        write SYS_CALL_CLOSE to REG_D
+        write OP_SYS_CALL to REG_OP
+        cpu_exec
+
+        copy var:battlefield_analysed_counter to REG_A
+        write 1 to REG_B
+        write OP_INCR to REG_OP
+        cpu_exec
+        copy REG_RES to var:battlefield_analysed_counter
+
+        // Check if we have analysed all battlefields
+        copy var:battlefield_analysed_counter to REG_A
+        write 2 to REG_B
+        write OP_CMP_NEQ to REG_OP
+        cpu_exec
+        jump_if label:second_battlefield
+
+        copy var:ships_cells to var:user2_ships_cells
+        jump label:battlefield_analysis_end
+
+label battlefield_analysis_end
+
+// Print a welcome message
+write "Welcome to Battleship game!" to REG_A
+write COLOR_NO to REG_B
+write SYS_CALL_PRINTLN to REG_D
+write OP_SYS_CALL to REG_OP
+cpu_exec
+
+label exit
+  write SYS_CALL_EXIT to REG_D
+  write OP_SYS_CALL to REG_OP
+  cpu_exec
+
+label exit_error
+  copy REG_ERROR to REG_A
+  write COLOR_RED to REG_B
+  write SYS_CALL_PRINTLN to REG_D
+  write OP_SYS_CALL to REG_OP
+  cpu_exec
+  jump label:exit
