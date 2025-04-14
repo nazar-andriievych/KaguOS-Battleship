@@ -2,7 +2,7 @@
 
 // Analyze the battlefields
 var battlefield_path
-var battlefield_analysed_counter
+var battlefield_analysis_counter
 var row_counter
 var column_counter
 var battlefield_fd
@@ -13,11 +13,13 @@ var user1_ships_cells
 var user2_ships_cells
 var cell_coordinates
 
+// Analyze the first battlefield
 write "field1" to var:battlefield_path
-write 0 to var:battlefield_analysed_counter
+write 0 to var:battlefield_analysis_counter
 write "" to var:ships_cells
 jump label:battlefield_analysis
 
+// Analyze the second battlefield
 label second_battlefield
 copy var:ships_cells to var:user1_ships_cells
 write "field2" to var:battlefield_path
@@ -35,6 +37,7 @@ label battlefield_analysis
     write 1 to var:row_counter
 
     label row_loop
+        // Read the row from the battlefield file
         copy var:battlefield_fd to REG_A
         copy var:row_counter to REG_B
         write SYS_CALL_READ to REG_D
@@ -94,7 +97,7 @@ label battlefield_analysis
         jump_if label:row_loop_end
         jump label:row_loop
 
-    
+    // Add ship coordinates to the ships_cells
     label add_ship
         // Get the coordinates of the cell
         copy var:row_counter to REG_A
@@ -129,14 +132,14 @@ label battlefield_analysis
         write OP_SYS_CALL to REG_OP
         cpu_exec
 
-        copy var:battlefield_analysed_counter to REG_A
+        copy var:battlefield_analysis_counter to REG_A
         write 1 to REG_B
         write OP_INCR to REG_OP
         cpu_exec
-        copy REG_RES to var:battlefield_analysed_counter
+        copy REG_RES to var:battlefield_analysis_counter
 
         // Check if we have analysed all battlefields
-        copy var:battlefield_analysed_counter to REG_A
+        copy var:battlefield_analysis_counter to REG_A
         write 2 to REG_B
         write OP_CMP_NEQ to REG_OP
         cpu_exec
@@ -147,10 +150,128 @@ label battlefield_analysis
 
 label battlefield_analysis_end
 
+// Initialize the fields
+
+// Get free memory space
+var free_start
+var free_end
+
+copy 0 to REG_A
+write 4 to REG_B
+write " " to REG_C
+write OP_GET_COLUMN to REG_OP
+cpu_exec
+copy REG_RES to var:free_start
+
+copy 0 to REG_A
+write 5 to REG_B
+write " " to REG_C
+write OP_GET_COLUMN to REG_OP
+cpu_exec
+copy REG_RES to var:free_end
+
+// Cheak if we have enough RAM space
+var difference
+copy var:free_end to REG_A
+copy var:free_start to REG_B
+write OP_SUB to REG_OP
+cpu_exec
+copy REG_RES to var:difference
+
+copy 22 to REG_A
+copy var:difference to REG_B
+write OP_CMP_LT to REG_OP
+cpu_exec
+jump_if_not label:exit_error
+
+// Get fields bounds
+var first_bitmap_start
+var first_field_end
+var second_bitmap_start
+var second_field_end
+var first_bitmap_end
+var second_bitmap_end
+
+copy var:free_start to var:first_bitmap_start
+
+copy var:free_start to REG_A
+write 9 to REG_B
+write OP_ADD to REG_OP
+cpu_exec
+copy REG_RES to var:first_field_end
+
+copy var:first_field_end to REG_A
+write OP_INCR to REG_OP
+cpu_exec
+copy REG_RES to var:first_bitmap_end
+
+copy var:first_bitmap_end to REG_A
+write OP_INCR to REG_OP
+cpu_exec
+copy REG_RES to var:second_bitmap_start
+
+copy var:second_bitmap_start to REG_A
+write 9 to REG_B
+write OP_ADD to REG_OP
+cpu_exec
+copy REG_RES to var:second_field_end
+
+copy var:second_field_end to REG_A
+write OP_INCR to REG_OP
+cpu_exec
+copy REG_RES to var:second_bitmap_end
+
+// Initialize the battlefields
+var empty_field_row
+write "cccccccccc" to var:empty_field_row
+
+// Initialyze counters
+var init_battlefield_counter
+var init_battlefield_counter_end
+
+copy var:free_start to var:init_battlefield_counter
+
+label init_battlefield_loop
+    // Initialize a row of the battlefields
+    copy var:empty_field_row to *var:init_battlefield_counter
+
+    // Increment the counter
+    copy var:init_battlefield_counter to REG_A
+    write OP_INCR to REG_OP
+    cpu_exec
+    copy REG_RES to var:init_battlefield_counter
+
+    // Check if we reached the end of the first bitmap
+    copy var:init_battlefield_counter to REG_A
+    copy var:first_bitmap_end to REG_B
+    write OP_CMP_EQ to REG_OP
+    cpu_exec
+    jump_if label:init_battlefield_first_bitmap_end
+
+    // Check if we reached the end of the second bitmap
+    copy var:init_battlefield_counter to REG_A
+    copy var:second_bitmap_end to REG_B
+    write OP_CMP_EQ to REG_OP
+    cpu_exec
+    jump_if label:init_battlefield_loop_end
+    jump label:init_battlefield_loop
+
+    label init_battlefield_first_bitmap_end
+        copy var:second_bitmap_start to var:init_battlefield_counter
+        jump label:init_battlefield_loop
+
+label init_battlefield_loop_end
+
 // Print a welcome message
 write "Welcome to Battleship game!" to REG_A
 write COLOR_NO to REG_B
 write SYS_CALL_PRINTLN to REG_D
+write OP_SYS_CALL to REG_OP
+cpu_exec
+
+// Delay for 1 second
+write 1 to REG_A
+write SYS_CALL_SLEEP to REG_D
 write OP_SYS_CALL to REG_OP
 cpu_exec
 
