@@ -563,460 +563,450 @@ X-----X--X
 -XX--X---X
 -----X---X
 -XX------X
-1 471 525      #  write "field1" => var:battlefield_path
-1 472 526      #  write "0" => var:battlefield_analysis_counter
-1 473 532      #  write "" => var:ships_cells
+1 461 515      #  write "field1" => var:battlefield_path
+1 462 516      #  write "0" => var:battlefield_analysis_counter
+1 463 522      #  write "" => var:ships_cells
 3 25           #  jump lbl:battlefield_analysis
-1 532 533      #  copy var:ships_cells => var:player1_ships_cells
-1 474 525      #  write "field2" => var:battlefield_path
-1 473 532      #  write "" => var:ships_cells
+1 522 523      #  copy var:ships_cells => var:player1_ships_cells
+1 464 515      #  write "field2" => var:battlefield_path
+1 463 522      #  write "" => var:ships_cells
 3 25           #  jump lbl:battlefield_analysis
-1 525 4        #  copy var:battlefield_path => REG_A
-1 475 10       #  write SYS_CALL_OPEN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 515 4        #  copy var:battlefield_path => REG_A
+1 465 10       #  write SYS_CALL_OPEN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 12 529       #  copy REG_RES => var:battlefield_fd
-1 477 527      #  write "1" => var:row_counter
-1 529 4        #  copy var:battlefield_fd => REG_A
-1 527 6        #  copy var:row_counter => REG_B
-1 478 10       #  write SYS_CALL_READ => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 12 519       #  copy REG_RES => var:battlefield_fd
+1 467 517      #  write "1" => var:row_counter
+1 519 4        #  copy var:battlefield_fd => REG_A
+1 517 6        #  copy var:row_counter => REG_B
+1 468 10       #  write SYS_CALL_READ => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 12 530       #  copy REG_RES => var:row
-1 477 528      #  write "1" => var:column_counter
-1 530 4        #  copy var:row => REG_A
-1 528 6        #  copy var:column_counter => REG_B
-1 473 8        #  write "" => REG_C
-1 479 2        #  write OP_GET_COLUMN => REG_OP
+1 12 520       #  copy REG_RES => var:row
+1 467 518      #  write "1" => var:column_counter
+1 520 4        #  copy var:row => REG_A
+1 518 6        #  copy var:column_counter => REG_B
+1 463 8        #  write "" => REG_C
+1 469 2        #  write OP_GET_COLUMN => REG_OP
 0              #  cpu_exec
-1 12 531       #  copy REG_RES => var:cell
-1 480 4        #  write "X" => REG_A
-1 531 6        #  copy var:cell => REG_B
-1 481 2        #  write OP_CMP_EQ => REG_OP
+1 12 521       #  copy REG_RES => var:cell
+1 470 4        #  write "X" => REG_A
+1 521 6        #  copy var:cell => REG_B
+1 471 2        #  write OP_CMP_EQ => REG_OP
 0              #  cpu_exec
-6 465          #  jump_err lbl:exit_error
+6 455          #  jump_err lbl:exit_error
 4 70           #  jump_if lbl:add_ship
-1 528 4        #  copy var:column_counter => REG_A
-1 482 2        #  write OP_INCR => REG_OP
+1 518 4        #  copy var:column_counter => REG_A
+1 472 2        #  write OP_INCR => REG_OP
 0              #  cpu_exec
-1 12 528       #  copy REG_RES => var:column_counter
-1 528 4        #  copy var:column_counter => REG_A
-1 483 6        #  write "11" => REG_B
-1 481 2        #  write OP_CMP_EQ => REG_OP
+1 12 518       #  copy REG_RES => var:column_counter
+1 518 4        #  copy var:column_counter => REG_A
+1 473 6        #  write "11" => REG_B
+1 471 2        #  write OP_CMP_EQ => REG_OP
 0              #  cpu_exec
 4 60           #  jump_if lbl:column_loop_end
 3 38           #  jump lbl:column_loop
-1 527 4        #  copy var:row_counter => REG_A
-1 482 2        #  write OP_INCR => REG_OP
+1 517 4        #  copy var:row_counter => REG_A
+1 472 2        #  write OP_INCR => REG_OP
 0              #  cpu_exec
-1 12 527       #  copy REG_RES => var:row_counter
-1 527 4        #  copy var:row_counter => REG_A
-1 483 6        #  write "11" => REG_B
-1 481 2        #  write OP_CMP_EQ => REG_OP
+1 12 517       #  copy REG_RES => var:row_counter
+1 517 4        #  copy var:row_counter => REG_A
+1 473 6        #  write "11" => REG_B
+1 471 2        #  write OP_CMP_EQ => REG_OP
 0              #  cpu_exec
 4 89           #  jump_if lbl:row_loop_end
 3 31           #  jump lbl:row_loop
-1 527 4        #  copy var:row_counter => REG_A
-1 528 6        #  copy var:column_counter => REG_B
-1 484 8        #  write "," => REG_C
-1 485 2        #  write OP_CONCAT_WITH => REG_OP
+1 517 4        #  copy var:row_counter => REG_A
+1 518 6        #  copy var:column_counter => REG_B
+1 474 8        #  write "," => REG_C
+1 475 2        #  write OP_CONCAT_WITH => REG_OP
 0              #  cpu_exec
-1 12 535       #  copy REG_RES => var:cell_coordinates
-1 532 4        #  copy var:ships_cells => REG_A
-1 535 6        #  copy var:cell_coordinates => REG_B
-1 473 8        #  write "" => REG_C
-1 485 2        #  write OP_CONCAT_WITH => REG_OP
+1 12 525       #  copy REG_RES => var:cell_coordinates
+1 522 4        #  copy var:ships_cells => REG_A
+1 525 6        #  copy var:cell_coordinates => REG_B
+1 463 8        #  write "" => REG_C
+1 475 2        #  write OP_CONCAT_WITH => REG_OP
 0              #  cpu_exec
-1 12 532       #  copy REG_RES => var:ships_cells
-1 532 4        #  copy var:ships_cells => REG_A
-1 486 6        #  write " " => REG_B
-1 473 8        #  write "" => REG_C
-1 485 2        #  write OP_CONCAT_WITH => REG_OP
+1 12 522       #  copy REG_RES => var:ships_cells
+1 522 4        #  copy var:ships_cells => REG_A
+1 476 6        #  write " " => REG_B
+1 463 8        #  write "" => REG_C
+1 475 2        #  write OP_CONCAT_WITH => REG_OP
 0              #  cpu_exec
-1 12 532       #  copy REG_RES => var:ships_cells
+1 12 522       #  copy REG_RES => var:ships_cells
 3 50           #  jump lbl:add_ship_end
-1 529 4        #  copy var:battlefield_fd => REG_A
-1 487 10       #  write SYS_CALL_CLOSE => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 519 4        #  copy var:battlefield_fd => REG_A
+1 477 10       #  write SYS_CALL_CLOSE => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 526 4        #  copy var:battlefield_analysis_counter => REG_A
-1 477 6        #  write "1" => REG_B
-1 482 2        #  write OP_INCR => REG_OP
+1 516 4        #  copy var:battlefield_analysis_counter => REG_A
+1 467 6        #  write "1" => REG_B
+1 472 2        #  write OP_INCR => REG_OP
 0              #  cpu_exec
-1 12 526       #  copy REG_RES => var:battlefield_analysis_counter
-1 526 4        #  copy var:battlefield_analysis_counter => REG_A
-1 488 6        #  write "2" => REG_B
-1 489 2        #  write OP_CMP_NEQ => REG_OP
+1 12 516       #  copy REG_RES => var:battlefield_analysis_counter
+1 516 4        #  copy var:battlefield_analysis_counter => REG_A
+1 478 6        #  write "2" => REG_B
+1 479 2        #  write OP_CMP_NEQ => REG_OP
 0              #  cpu_exec
 4 21           #  jump_if lbl:second_battlefield
-1 532 534      #  copy var:ships_cells => var:player2_ships_cells
+1 522 524      #  copy var:ships_cells => var:player2_ships_cells
 3 105          #  jump lbl:battlefield_analysis_end
 1 0 4          #  copy 0 => REG_A
-1 490 6        #  write "4" => REG_B
-1 486 8        #  write " " => REG_C
-1 479 2        #  write OP_GET_COLUMN => REG_OP
+1 480 6        #  write "4" => REG_B
+1 476 8        #  write " " => REG_C
+1 469 2        #  write OP_GET_COLUMN => REG_OP
 0              #  cpu_exec
-1 12 536       #  copy REG_RES => var:free_start
+1 12 526       #  copy REG_RES => var:free_start
 1 0 4          #  copy 0 => REG_A
-1 491 6        #  write "5" => REG_B
-1 486 8        #  write " " => REG_C
-1 479 2        #  write OP_GET_COLUMN => REG_OP
+1 481 6        #  write "5" => REG_B
+1 476 8        #  write " " => REG_C
+1 469 2        #  write OP_GET_COLUMN => REG_OP
 0              #  cpu_exec
-1 12 537       #  copy REG_RES => var:free_end
-1 537 4        #  copy var:free_end => REG_A
-1 536 6        #  copy var:free_start => REG_B
-1 492 2        #  write OP_SUB => REG_OP
+1 12 527       #  copy REG_RES => var:free_end
+1 527 4        #  copy var:free_end => REG_A
+1 526 6        #  copy var:free_start => REG_B
+1 482 2        #  write OP_SUB => REG_OP
 0              #  cpu_exec
-1 12 538       #  copy REG_RES => var:difference
+1 12 528       #  copy REG_RES => var:difference
 1 22 4         #  copy 22 => REG_A
-1 538 6        #  copy var:difference => REG_B
-1 493 2        #  write OP_CMP_LT => REG_OP
+1 528 6        #  copy var:difference => REG_B
+1 483 2        #  write OP_CMP_LT => REG_OP
 0              #  cpu_exec
-5 465          #  jump_if_not lbl:exit_error
-1 536 539      #  copy var:free_start => var:player1_bitmap_start
-1 536 4        #  copy var:free_start => REG_A
-1 494 6        #  write "9" => REG_B
-1 495 2        #  write OP_ADD => REG_OP
+5 455          #  jump_if_not lbl:exit_error
+1 526 529      #  copy var:free_start => var:player1_bitmap_start
+1 526 4        #  copy var:free_start => REG_A
+1 484 6        #  write "9" => REG_B
+1 485 2        #  write OP_ADD => REG_OP
 0              #  cpu_exec
-1 12 540       #  copy REG_RES => var:player1_field_end
-1 540 4        #  copy var:player1_field_end => REG_A
-1 482 2        #  write OP_INCR => REG_OP
+1 12 530       #  copy REG_RES => var:player1_field_end
+1 530 4        #  copy var:player1_field_end => REG_A
+1 472 2        #  write OP_INCR => REG_OP
 0              #  cpu_exec
-1 12 543       #  copy REG_RES => var:player1_bitmap_end
-1 543 4        #  copy var:player1_bitmap_end => REG_A
-1 482 2        #  write OP_INCR => REG_OP
+1 12 533       #  copy REG_RES => var:player1_bitmap_end
+1 533 4        #  copy var:player1_bitmap_end => REG_A
+1 472 2        #  write OP_INCR => REG_OP
 0              #  cpu_exec
-1 12 541       #  copy REG_RES => var:player2_bitmap_start
-1 541 4        #  copy var:player2_bitmap_start => REG_A
-1 494 6        #  write "9" => REG_B
-1 495 2        #  write OP_ADD => REG_OP
+1 12 531       #  copy REG_RES => var:player2_bitmap_start
+1 531 4        #  copy var:player2_bitmap_start => REG_A
+1 484 6        #  write "9" => REG_B
+1 485 2        #  write OP_ADD => REG_OP
 0              #  cpu_exec
-1 12 542       #  copy REG_RES => var:player2_field_end
-1 542 4        #  copy var:player2_field_end => REG_A
-1 482 2        #  write OP_INCR => REG_OP
+1 12 532       #  copy REG_RES => var:player2_field_end
+1 532 4        #  copy var:player2_field_end => REG_A
+1 472 2        #  write OP_INCR => REG_OP
 0              #  cpu_exec
-1 12 544       #  copy REG_RES => var:player2_bitmap_end
-1 496 545      #  write "cccccccccc" => var:empty_field_row
-1 536 546      #  copy var:free_start => var:init_battlefield_counter
-1 545 *546     #  copy var:empty_field_row => *var:init_battlefield_counter
-1 546 4        #  copy var:init_battlefield_counter => REG_A
-1 482 2        #  write OP_INCR => REG_OP
+1 12 534       #  copy REG_RES => var:player2_bitmap_end
+1 486 535      #  write "cccccccccc" => var:empty_field_row
+1 526 536      #  copy var:free_start => var:init_battlefield_counter
+1 535 *536     #  copy var:empty_field_row => *var:init_battlefield_counter
+1 536 4        #  copy var:init_battlefield_counter => REG_A
+1 472 2        #  write OP_INCR => REG_OP
 0              #  cpu_exec
-1 12 546       #  copy REG_RES => var:init_battlefield_counter
-1 546 4        #  copy var:init_battlefield_counter => REG_A
-1 543 6        #  copy var:player1_bitmap_end => REG_B
-1 481 2        #  write OP_CMP_EQ => REG_OP
+1 12 536       #  copy REG_RES => var:init_battlefield_counter
+1 536 4        #  copy var:init_battlefield_counter => REG_A
+1 533 6        #  copy var:player1_bitmap_end => REG_B
+1 471 2        #  write OP_CMP_EQ => REG_OP
 0              #  cpu_exec
 4 168          #  jump_if lbl:init_battlefield_first_bitmap_end
-1 546 4        #  copy var:init_battlefield_counter => REG_A
-1 544 6        #  copy var:player2_bitmap_end => REG_B
-1 481 2        #  write OP_CMP_EQ => REG_OP
+1 536 4        #  copy var:init_battlefield_counter => REG_A
+1 534 6        #  copy var:player2_bitmap_end => REG_B
+1 471 2        #  write OP_CMP_EQ => REG_OP
 0              #  cpu_exec
 4 170          #  jump_if lbl:init_battlefield_loop_end
 3 152          #  jump lbl:init_battlefield_loop
-1 541 546      #  copy var:player2_bitmap_start => var:init_battlefield_counter
+1 531 536      #  copy var:player2_bitmap_start => var:init_battlefield_counter
 3 152          #  jump lbl:init_battlefield_loop
-1 533 4        #  copy var:player1_ships_cells => REG_A
-1 497 6        #  write COLOR_NO => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 487 4        #  write "Welcome to Battleship game!" => REG_A
+1 488 6        #  write COLOR_NO => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 534 4        #  copy var:player2_ships_cells => REG_A
-1 497 6        #  write COLOR_NO => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 478 4        #  write "2" => REG_A
+1 490 10       #  write SYS_CALL_SLEEP => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 499 4        #  write "Welcome to Battleship game!" => REG_A
-1 497 6        #  write COLOR_NO => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 467 538      #  write "1" => var:player
+1 463 539      #  write "" => var:player1_shots
+1 463 540      #  write "" => var:player2_shots
+1 462 541      #  write "0" => var:player1_hits_count
+1 462 542      #  write "0" => var:player2_hits_count
+1 491 546      #  write "20" => var:all_ships_cells
+1 462 547      #  write "0" => var:hit_switch
+1 538 4        #  copy var:player => REG_A
+1 467 6        #  write "1" => REG_B
+1 471 2        #  write OP_CMP_EQ => REG_OP
 0              #  cpu_exec
-1 488 4        #  write "2" => REG_A
-1 500 10       #  write SYS_CALL_SLEEP => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+4 210          #  jump_if lbl:player1_turn
+3 317          #  jump lbl:player2_turn
+1 538 4        #  copy var:player => REG_A
+1 467 6        #  write "1" => REG_B
+1 471 2        #  write OP_CMP_EQ => REG_OP
 0              #  cpu_exec
-1 477 548      #  write "1" => var:player
-1 473 549      #  write "" => var:player1_shots
-1 473 550      #  write "" => var:player2_shots
-1 472 551      #  write "0" => var:player1_hits_count
-1 472 552      #  write "0" => var:player2_hits_count
-1 501 556      #  write "20" => var:all_ships_cells
-1 472 557      #  write "0" => var:hit_switch
-1 548 4        #  copy var:player => REG_A
-1 477 6        #  write "1" => REG_B
-1 481 2        #  write OP_CMP_EQ => REG_OP
+4 424          #  jump_if lbl:player1_win_cheak
+3 430          #  jump lbl:player2_win_cheak
+1 547 4        #  copy var:hit_switch => REG_A
+1 467 6        #  write "1" => REG_B
+1 471 2        #  write OP_CMP_EQ => REG_OP
 0              #  cpu_exec
-4 220          #  jump_if lbl:player1_turn
-3 327          #  jump lbl:player2_turn
-1 548 4        #  copy var:player => REG_A
-1 477 6        #  write "1" => REG_B
-1 481 2        #  write OP_CMP_EQ => REG_OP
+4 186          #  jump_if lbl:main_loop
+1 538 4        #  copy var:player => REG_A
+1 467 6        #  write "1" => REG_B
+1 471 2        #  write OP_CMP_EQ => REG_OP
 0              #  cpu_exec
-4 434          #  jump_if lbl:player1_win_cheak
-3 440          #  jump lbl:player2_win_cheak
-1 557 4        #  copy var:hit_switch => REG_A
-1 477 6        #  write "1" => REG_B
-1 481 2        #  write OP_CMP_EQ => REG_OP
+4 448          #  jump_if lbl:player1_to_player2
+3 450          #  jump lbl:player2_to_player1
+3 186          #  jump lbl:main_loop
+1 492 4        #  write "Player1 turn" => REG_A
+1 488 6        #  write COLOR_NO => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-4 196          #  jump_if lbl:main_loop
-1 548 4        #  copy var:player => REG_A
-1 477 6        #  write "1" => REG_B
-1 481 2        #  write OP_CMP_EQ => REG_OP
+1 478 4        #  write "2" => REG_A
+1 490 10       #  write SYS_CALL_SLEEP => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-4 458          #  jump_if lbl:player1_to_player2
-3 460          #  jump lbl:player2_to_player1
-3 196          #  jump lbl:main_loop
-1 502 4        #  write "Player1 turn" => REG_A
-1 497 6        #  write COLOR_NO => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 531 4        #  copy var:player2_bitmap_start => REG_A
+1 534 6        #  copy var:player2_bitmap_end => REG_B
+1 493 10       #  write SYS_CALL_RENDER_BITMAP => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 488 4        #  write "2" => REG_A
-1 500 10       #  write SYS_CALL_SLEEP => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 494 4        #  write "Player2 field" => REG_A
+1 488 6        #  write COLOR_NO => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 541 4        #  copy var:player2_bitmap_start => REG_A
-1 544 6        #  copy var:player2_bitmap_end => REG_B
-1 503 10       #  write SYS_CALL_RENDER_BITMAP => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 495 4        #  write "Player1: Shoot a boat by writing cordinates(row,column)(E.g. - 1,6): " => REG_A
+1 488 6        #  write COLOR_NO => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 504 4        #  write "Player2 field" => REG_A
-1 497 6        #  write COLOR_NO => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 496 4        #  write KEYBOARD_READ_LINE => REG_A
+1 497 10       #  write SYS_CALL_READ_INPUT => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 505 4        #  write "Player1: Shoot a boat by writing cordinates(row,column)(1,6): " => REG_A
-1 497 6        #  write COLOR_NO => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 12 525       #  copy REG_RES => var:cell_coordinates
+1 539 4        #  copy var:player1_shots => REG_A
+1 525 6        #  copy var:cell_coordinates => REG_B
+1 498 2        #  write OP_CONTAINS => REG_OP
 0              #  cpu_exec
-1 506 4        #  write KEYBOARD_READ_LINE => REG_A
-1 507 10       #  write SYS_CALL_READ_INPUT => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+4 311          #  jump_if lbl:player1_reshot
+1 539 4        #  copy var:player1_shots => REG_A
+1 525 6        #  copy var:cell_coordinates => REG_B
+1 476 8        #  write " " => REG_C
+1 475 2        #  write OP_CONCAT_WITH => REG_OP
 0              #  cpu_exec
-1 12 535       #  copy REG_RES => var:cell_coordinates
-1 549 4        #  copy var:player1_shots => REG_A
-1 535 6        #  copy var:cell_coordinates => REG_B
-1 508 2        #  write OP_CONTAINS => REG_OP
+1 12 539       #  copy REG_RES => var:player1_shots
+1 524 4        #  copy var:player2_ships_cells => REG_A
+1 525 6        #  copy var:cell_coordinates => REG_B
+1 498 2        #  write OP_CONTAINS => REG_OP
 0              #  cpu_exec
-4 321          #  jump_if lbl:player1_reshot
-1 549 4        #  copy var:player1_shots => REG_A
-1 535 6        #  copy var:cell_coordinates => REG_B
-1 486 8        #  write " " => REG_C
-1 485 2        #  write OP_CONCAT_WITH => REG_OP
+4 256          #  jump_if lbl:player1_hit
+3 264          #  jump lbl:player1_miss
+1 541 4        #  copy var:player1_hits_count => REG_A
+1 472 2        #  write OP_INCR => REG_OP
 0              #  cpu_exec
-1 12 549       #  copy REG_RES => var:player1_shots
-1 534 4        #  copy var:player2_ships_cells => REG_A
-1 535 6        #  copy var:cell_coordinates => REG_B
-1 508 2        #  write OP_CONTAINS => REG_OP
+1 12 541       #  copy REG_RES => var:player1_hits_count
+1 499 521      #  write "r" => var:cell
+1 467 547      #  write "1" => var:hit_switch
+1 500 548      #  write "You hit a ship!" => var:shot_message
+3 267          #  jump lbl:player1_shot_check_end
+1 501 521      #  write "b" => var:cell
+1 462 547      #  write "0" => var:hit_switch
+1 502 548      #  write "You missed!" => var:shot_message
+1 525 4        #  copy var:cell_coordinates => REG_A
+1 467 6        #  write "1" => REG_B
+1 474 8        #  write "," => REG_C
+1 469 2        #  write OP_GET_COLUMN => REG_OP
 0              #  cpu_exec
-4 266          #  jump_if lbl:player1_hit
-3 274          #  jump lbl:player1_miss
-1 551 4        #  copy var:player1_hits_count => REG_A
-1 482 2        #  write OP_INCR => REG_OP
-0              #  cpu_exec
-1 12 551       #  copy REG_RES => var:player1_hits_count
-1 509 531      #  write "r" => var:cell
-1 477 557      #  write "1" => var:hit_switch
-1 510 558      #  write "You hit a ship!" => var:shot_message
-3 277          #  jump lbl:player1_shot_check_end
-1 511 531      #  write "b" => var:cell
-1 472 557      #  write "0" => var:hit_switch
-1 512 558      #  write "You missed!" => var:shot_message
-1 535 4        #  copy var:cell_coordinates => REG_A
-1 477 6        #  write "1" => REG_B
-1 484 8        #  write "," => REG_C
-1 479 2        #  write OP_GET_COLUMN => REG_OP
-0              #  cpu_exec
-1 12 553       #  copy REG_RES => var:row_number
-1 541 4        #  copy var:player2_bitmap_start => REG_A
-1 553 6        #  copy var:row_number => REG_B
-1 495 2        #  write OP_ADD => REG_OP
+1 12 543       #  copy REG_RES => var:row_number
+1 531 4        #  copy var:player2_bitmap_start => REG_A
+1 543 6        #  copy var:row_number => REG_B
+1 485 2        #  write OP_ADD => REG_OP
 0              #  cpu_exec
 1 12 4         #  copy REG_RES => REG_A
-1 513 2        #  write OP_DECR => REG_OP
+1 503 2        #  write OP_DECR => REG_OP
 0              #  cpu_exec
-1 12 554       #  copy REG_RES => var:row_RAM
-1 *554 530     #  copy *var:row_RAM => var:row
-1 535 4        #  copy var:cell_coordinates => REG_A
-1 488 6        #  write "2" => REG_B
-1 484 8        #  write "," => REG_C
-1 479 2        #  write OP_GET_COLUMN => REG_OP
+1 12 544       #  copy REG_RES => var:row_RAM
+1 *544 520     #  copy *var:row_RAM => var:row
+1 525 4        #  copy var:cell_coordinates => REG_A
+1 478 6        #  write "2" => REG_B
+1 474 8        #  write "," => REG_C
+1 469 2        #  write OP_GET_COLUMN => REG_OP
 0              #  cpu_exec
-1 12 555       #  copy REG_RES => var:column_number
-1 530 4        #  copy var:row => REG_A
-1 555 6        #  copy var:column_number => REG_B
-1 473 8        #  write "" => REG_C
-1 531 10       #  copy var:cell => REG_D
-1 514 2        #  write OP_REPLACE_COLUMN => REG_OP
+1 12 545       #  copy REG_RES => var:column_number
+1 520 4        #  copy var:row => REG_A
+1 545 6        #  copy var:column_number => REG_B
+1 463 8        #  write "" => REG_C
+1 521 10       #  copy var:cell => REG_D
+1 504 2        #  write OP_REPLACE_COLUMN => REG_OP
 0              #  cpu_exec
-1 12 530       #  copy REG_RES => var:row
-1 530 *554     #  copy var:row => *var:row_RAM
-1 541 4        #  copy var:player2_bitmap_start => REG_A
-1 544 6        #  copy var:player2_bitmap_end => REG_B
-1 503 10       #  write SYS_CALL_RENDER_BITMAP => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 12 520       #  copy REG_RES => var:row
+1 520 *544     #  copy var:row => *var:row_RAM
+1 531 4        #  copy var:player2_bitmap_start => REG_A
+1 534 6        #  copy var:player2_bitmap_end => REG_B
+1 493 10       #  write SYS_CALL_RENDER_BITMAP => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 558 4        #  copy var:shot_message => REG_A
-1 497 6        #  write COLOR_NO => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 548 4        #  copy var:shot_message => REG_A
+1 488 6        #  write COLOR_NO => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 488 4        #  write "2" => REG_A
-1 500 10       #  write SYS_CALL_SLEEP => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 478 4        #  write "2" => REG_A
+1 490 10       #  write SYS_CALL_SLEEP => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-3 202          #  jump lbl:turn_end
-1 515 4        #  write "You alreadye shot there. Try other coordinates: " => REG_A
-1 497 6        #  write COLOR_NO => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+3 192          #  jump lbl:turn_end
+1 505 4        #  write "You alreadye shot there. Try other coordinates: " => REG_A
+1 488 6        #  write COLOR_NO => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-3 244          #  jump lbl:player1_reshot_end
-1 516 4        #  write "Player2 turn" => REG_A
-1 497 6        #  write COLOR_NO => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+3 234          #  jump lbl:player1_reshot_end
+1 506 4        #  write "Player2 turn" => REG_A
+1 488 6        #  write COLOR_NO => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 488 4        #  write "2" => REG_A
-1 500 10       #  write SYS_CALL_SLEEP => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 478 4        #  write "2" => REG_A
+1 490 10       #  write SYS_CALL_SLEEP => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 539 4        #  copy var:player1_bitmap_start => REG_A
-1 543 6        #  copy var:player1_bitmap_end => REG_B
-1 503 10       #  write SYS_CALL_RENDER_BITMAP => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 529 4        #  copy var:player1_bitmap_start => REG_A
+1 533 6        #  copy var:player1_bitmap_end => REG_B
+1 493 10       #  write SYS_CALL_RENDER_BITMAP => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 517 4        #  write "Player1 field" => REG_A
-1 497 6        #  write COLOR_NO => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 507 4        #  write "Player1 field" => REG_A
+1 488 6        #  write COLOR_NO => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 518 4        #  write "Player2: Shoot a boat by writing cordinates(row,column)(1,6): " => REG_A
-1 497 6        #  write COLOR_NO => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 508 4        #  write "Player2: Shoot a boat by writing cordinates(row,column)(E.g. - 1,6): " => REG_A
+1 488 6        #  write COLOR_NO => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 506 4        #  write KEYBOARD_READ_LINE => REG_A
-1 507 10       #  write SYS_CALL_READ_INPUT => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 496 4        #  write KEYBOARD_READ_LINE => REG_A
+1 497 10       #  write SYS_CALL_READ_INPUT => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 12 535       #  copy REG_RES => var:cell_coordinates
-1 550 4        #  copy var:player2_shots => REG_A
-1 535 6        #  copy var:cell_coordinates => REG_B
-1 508 2        #  write OP_CONTAINS => REG_OP
+1 12 525       #  copy REG_RES => var:cell_coordinates
+1 540 4        #  copy var:player2_shots => REG_A
+1 525 6        #  copy var:cell_coordinates => REG_B
+1 498 2        #  write OP_CONTAINS => REG_OP
 0              #  cpu_exec
-4 321          #  jump_if lbl:player1_reshot
-1 550 4        #  copy var:player2_shots => REG_A
-1 535 6        #  copy var:cell_coordinates => REG_B
-1 486 8        #  write " " => REG_C
-1 485 2        #  write OP_CONCAT_WITH => REG_OP
+4 311          #  jump_if lbl:player1_reshot
+1 540 4        #  copy var:player2_shots => REG_A
+1 525 6        #  copy var:cell_coordinates => REG_B
+1 476 8        #  write " " => REG_C
+1 475 2        #  write OP_CONCAT_WITH => REG_OP
 0              #  cpu_exec
-1 12 550       #  copy REG_RES => var:player2_shots
-1 533 4        #  copy var:player1_ships_cells => REG_A
-1 535 6        #  copy var:cell_coordinates => REG_B
-1 508 2        #  write OP_CONTAINS => REG_OP
+1 12 540       #  copy REG_RES => var:player2_shots
+1 523 4        #  copy var:player1_ships_cells => REG_A
+1 525 6        #  copy var:cell_coordinates => REG_B
+1 498 2        #  write OP_CONTAINS => REG_OP
 0              #  cpu_exec
-4 373          #  jump_if lbl:player2_hit
-3 381          #  jump lbl:player2_miss
-1 552 4        #  copy var:player2_hits_count => REG_A
-1 482 2        #  write OP_INCR => REG_OP
+4 363          #  jump_if lbl:player2_hit
+3 371          #  jump lbl:player2_miss
+1 542 4        #  copy var:player2_hits_count => REG_A
+1 472 2        #  write OP_INCR => REG_OP
 0              #  cpu_exec
-1 12 552       #  copy REG_RES => var:player2_hits_count
-1 509 531      #  write "r" => var:cell
-1 477 557      #  write "1" => var:hit_switch
-1 510 558      #  write "You hit a ship!" => var:shot_message
-3 384          #  jump lbl:player2_shot_check_end
-1 511 531      #  write "b" => var:cell
-1 472 557      #  write "0" => var:hit_switch
-1 512 558      #  write "You missed!" => var:shot_message
-1 535 4        #  copy var:cell_coordinates => REG_A
-1 477 6        #  write "1" => REG_B
-1 484 8        #  write "," => REG_C
-1 479 2        #  write OP_GET_COLUMN => REG_OP
+1 12 542       #  copy REG_RES => var:player2_hits_count
+1 499 521      #  write "r" => var:cell
+1 467 547      #  write "1" => var:hit_switch
+1 500 548      #  write "You hit a ship!" => var:shot_message
+3 374          #  jump lbl:player2_shot_check_end
+1 501 521      #  write "b" => var:cell
+1 462 547      #  write "0" => var:hit_switch
+1 502 548      #  write "You missed!" => var:shot_message
+1 525 4        #  copy var:cell_coordinates => REG_A
+1 467 6        #  write "1" => REG_B
+1 474 8        #  write "," => REG_C
+1 469 2        #  write OP_GET_COLUMN => REG_OP
 0              #  cpu_exec
-1 12 553       #  copy REG_RES => var:row_number
-1 539 4        #  copy var:player1_bitmap_start => REG_A
-1 553 6        #  copy var:row_number => REG_B
-1 495 2        #  write OP_ADD => REG_OP
+1 12 543       #  copy REG_RES => var:row_number
+1 529 4        #  copy var:player1_bitmap_start => REG_A
+1 543 6        #  copy var:row_number => REG_B
+1 485 2        #  write OP_ADD => REG_OP
 0              #  cpu_exec
 1 12 4         #  copy REG_RES => REG_A
-1 513 2        #  write OP_DECR => REG_OP
+1 503 2        #  write OP_DECR => REG_OP
 0              #  cpu_exec
-1 12 554       #  copy REG_RES => var:row_RAM
-1 *554 530     #  copy *var:row_RAM => var:row
-1 535 4        #  copy var:cell_coordinates => REG_A
-1 488 6        #  write "2" => REG_B
-1 484 8        #  write "," => REG_C
-1 479 2        #  write OP_GET_COLUMN => REG_OP
+1 12 544       #  copy REG_RES => var:row_RAM
+1 *544 520     #  copy *var:row_RAM => var:row
+1 525 4        #  copy var:cell_coordinates => REG_A
+1 478 6        #  write "2" => REG_B
+1 474 8        #  write "," => REG_C
+1 469 2        #  write OP_GET_COLUMN => REG_OP
 0              #  cpu_exec
-1 12 555       #  copy REG_RES => var:column_number
-1 530 4        #  copy var:row => REG_A
-1 555 6        #  copy var:column_number => REG_B
-1 473 8        #  write "" => REG_C
-1 531 10       #  copy var:cell => REG_D
-1 514 2        #  write OP_REPLACE_COLUMN => REG_OP
+1 12 545       #  copy REG_RES => var:column_number
+1 520 4        #  copy var:row => REG_A
+1 545 6        #  copy var:column_number => REG_B
+1 463 8        #  write "" => REG_C
+1 521 10       #  copy var:cell => REG_D
+1 504 2        #  write OP_REPLACE_COLUMN => REG_OP
 0              #  cpu_exec
-1 12 530       #  copy REG_RES => var:row
-1 530 *554     #  copy var:row => *var:row_RAM
-1 539 4        #  copy var:player1_bitmap_start => REG_A
-1 543 6        #  copy var:player1_bitmap_end => REG_B
-1 503 10       #  write SYS_CALL_RENDER_BITMAP => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 12 520       #  copy REG_RES => var:row
+1 520 *544     #  copy var:row => *var:row_RAM
+1 529 4        #  copy var:player1_bitmap_start => REG_A
+1 533 6        #  copy var:player1_bitmap_end => REG_B
+1 493 10       #  write SYS_CALL_RENDER_BITMAP => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 558 4        #  copy var:shot_message => REG_A
-1 497 6        #  write COLOR_NO => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 548 4        #  copy var:shot_message => REG_A
+1 488 6        #  write COLOR_NO => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-1 488 4        #  write "2" => REG_A
-1 500 10       #  write SYS_CALL_SLEEP => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 478 4        #  write "2" => REG_A
+1 490 10       #  write SYS_CALL_SLEEP => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-3 202          #  jump lbl:turn_end
-1 519 4        #  write "You already shot there. Try other coordinates: " => REG_A
-1 497 6        #  write COLOR_NO => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+3 192          #  jump lbl:turn_end
+1 509 4        #  write "You already shot there. Try other coordinates: " => REG_A
+1 488 6        #  write COLOR_NO => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-3 351          #  jump lbl:player2_reshot_end
-1 556 4        #  copy var:all_ships_cells => REG_A
-1 551 6        #  copy var:player1_hits_count => REG_B
-1 481 2        #  write OP_CMP_EQ => REG_OP
+3 341          #  jump lbl:player2_reshot_end
+1 546 4        #  copy var:all_ships_cells => REG_A
+1 541 6        #  copy var:player1_hits_count => REG_B
+1 471 2        #  write OP_CMP_EQ => REG_OP
 0              #  cpu_exec
-4 446          #  jump_if lbl:player1_win
-3 208          #  jump lbl:win_cheak_end
-1 556 4        #  copy var:all_ships_cells => REG_A
-1 552 6        #  copy var:player2_hits_count => REG_B
-1 481 2        #  write OP_CMP_EQ => REG_OP
+4 436          #  jump_if lbl:player1_win
+3 198          #  jump lbl:win_cheak_end
+1 546 4        #  copy var:all_ships_cells => REG_A
+1 542 6        #  copy var:player2_hits_count => REG_B
+1 471 2        #  write OP_CMP_EQ => REG_OP
 0              #  cpu_exec
-4 452          #  jump_if lbl:player2_win
-3 208          #  jump lbl:win_cheak_end
-1 520 4        #  write "Player 1 wins!" => REG_A
-1 521 6        #  write COLOR_GREEN => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+4 442          #  jump_if lbl:player2_win
+3 198          #  jump lbl:win_cheak_end
+1 510 4        #  write "Player 1 wins!" => REG_A
+1 511 6        #  write COLOR_GREEN => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-3 462          #  jump lbl:exit
-1 522 4        #  write "Player 2 wins!" => REG_A
-1 521 6        #  write COLOR_GREEN => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+3 452          #  jump lbl:exit
+1 512 4        #  write "Player 2 wins!" => REG_A
+1 511 6        #  write COLOR_GREEN => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-3 462          #  jump lbl:exit
-1 488 548      #  write "2" => var:player
-3 219          #  jump lbl:player_switch_end
-1 477 548      #  write "1" => var:player
-3 219          #  jump lbl:player_switch_end
-1 523 10       #  write SYS_CALL_EXIT => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+3 452          #  jump lbl:exit
+1 478 538      #  write "2" => var:player
+3 209          #  jump lbl:player_switch_end
+1 467 538      #  write "1" => var:player
+3 209          #  jump lbl:player_switch_end
+1 513 10       #  write SYS_CALL_EXIT => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
 1 16 4         #  copy REG_ERROR => REG_A
-1 524 6        #  write COLOR_RED => REG_B
-1 498 10       #  write SYS_CALL_PRINTLN => REG_D
-1 476 2        #  write OP_SYS_CALL => REG_OP
+1 514 6        #  write COLOR_RED => REG_B
+1 489 10       #  write SYS_CALL_PRINTLN => REG_D
+1 466 2        #  write OP_SYS_CALL => REG_OP
 0              #  cpu_exec
-3 462          #  jump lbl:exit
+3 452          #  jump lbl:exit
 field1
 0
 
@@ -1043,15 +1033,15 @@ X
 9
 0
 cccccccccc
+Welcome to Battleship game!
 0
 1
-Welcome to Battleship game!
 11
 20
 Player1 turn
 10
 Player2 field
-Player1: Shoot a boat by writing cordinates(row,column)(1,6): 
+Player1: Shoot a boat by writing cordinates(row,column)(E.g. - 1,6): 
 KeyboardReadLine
 3
 12
@@ -1064,13 +1054,23 @@ You missed!
 You alreadye shot there. Try other coordinates: 
 Player2 turn
 Player1 field
-Player2: Shoot a boat by writing cordinates(row,column)(1,6): 
+Player2: Shoot a boat by writing cordinates(row,column)(E.g. - 1,6): 
 You already shot there. Try other coordinates: 
 Player 1 wins!
 1
 Player 2 wins!
 0
 3
+
+
+
+
+
+
+
+
+
+
 
 
 
