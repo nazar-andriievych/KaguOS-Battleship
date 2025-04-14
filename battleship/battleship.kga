@@ -285,15 +285,23 @@ var player2_shots
 write "" to var:player1_shots
 write "" to var:player2_shots
 
-var player1_shots_count
-var player2_shots_count
-write 0 to var:player1_shots_count
-write 0 to var:player2_shots_count
+var player1_hits_count
+var player2_hits_count
+write 0 to var:player1_hits_count
+write 0 to var:player2_hits_count
 
 var row_number
 var row_RAM
 
 var column_number
+
+var all_ships_cells
+write 20 to var:all_ships_cells
+
+var hit_switch
+write 0 to var:hit_switch
+
+var shot_message
 
 label main_loop
     // Determine the current player
@@ -304,6 +312,32 @@ label main_loop
     jump_if label:player1_turn
     jump label:player2_turn
     label turn_end
+
+    // Check if the player has won
+    copy var:player to REG_A
+    write 1 to REG_B
+    write OP_CMP_EQ to REG_OP
+    cpu_exec
+    jump_if label:player1_win_cheak
+    jump label:player2_win_cheak
+    label win_cheak_end
+
+    // Check if the hit switch is on 1
+    copy var:hit_switch to REG_A
+    write 1 to REG_B
+    write OP_CMP_EQ to REG_OP
+    cpu_exec
+    jump_if label:main_loop
+
+    // Switch the player
+    copy var:player to REG_A
+    write 1 to REG_B
+    write OP_CMP_EQ to REG_OP
+    cpu_exec
+    jump_if label:player1_to_player2
+    jump label:player2_to_player1
+    label player_switch_end
+
     jump label:main_loop
 
     // Player 1's turn
@@ -336,7 +370,7 @@ label main_loop
         cpu_exec
 
         // Prompt Player 1 to input coordinates for their shot
-        write "Player1: Shoot a boat by writing cordinates(row,column)(1,6): " to REG_A
+        write "Player1: Shoot a boat by writing cordinates(row,column)(E.g. - 1,6): " to REG_A
         write COLOR_NO to REG_B
         write SYS_CALL_PRINTLN to REG_D
         write OP_SYS_CALL to REG_OP
@@ -365,12 +399,6 @@ label main_loop
         cpu_exec
         copy REG_RES to var:player1_shots
 
-        // Increment Player 1's shot count
-        copy var:player1_shots_count to REG_A
-        write OP_INCR to REG_OP
-        cpu_exec
-        copy REG_RES to var:player1_shots_count
-
         // Check if Player 1 hit a ship on Player 2's battlefield
         copy var:player2_ships_cells to REG_A
         copy var:cell_coordinates to REG_B
@@ -380,13 +408,29 @@ label main_loop
         jump label:player1_miss
 
         label player1_hit
+            // Increment Player 1's hit count
+            copy var:player1_hits_count to REG_A
+            write OP_INCR to REG_OP
+            cpu_exec
+            copy REG_RES to var:player1_hits_count
+
             // Mark the hit cell with "r" (red)
             write "r" to var:cell
+
+            // Switch the hit switch
+            write 1 to var:hit_switch
+
+            write "You hit a ship!" to var:shot_message
+
             jump label:player1_shot_check_end
 
         label player1_miss
             // Mark the missed cell with "b" (blue)
             write "b" to var:cell
+            // Switch the hit switch
+            write 0 to var:hit_switch
+
+            write "You missed!" to var:shot_message
         label player1_shot_check_end
 
         // Update Player 2's battlefield bitmap with the shot result
@@ -433,6 +477,26 @@ label main_loop
         // Write the updated row back to RAM
         copy var:row to *var:row_RAM
 
+        // Render the updated bitmap
+        copy var:player2_bitmap_start to REG_A
+        copy var:player2_bitmap_end to REG_B
+        write SYS_CALL_RENDER_BITMAP to REG_D
+        write OP_SYS_CALL to REG_OP
+        cpu_exec
+
+        // Display the shot message
+        copy var:shot_message to REG_A
+        write COLOR_NO to REG_B
+        write SYS_CALL_PRINTLN to REG_D
+        write OP_SYS_CALL to REG_OP
+        cpu_exec
+
+        // Delay for 2 seconds to allow the player to read the message
+        write 2 to REG_A
+        write SYS_CALL_SLEEP to REG_D
+        write OP_SYS_CALL to REG_OP
+        cpu_exec
+
         jump label:turn_end
 
         label player1_reshot
@@ -473,7 +537,7 @@ label main_loop
         cpu_exec
 
         // Prompt Player 2 to input coordinates for their shot
-        write "Player2: Shoot a boat by writing cordinates(row,column)(1,6): " to REG_A
+        write "Player2: Shoot a boat by writing cordinates(row,column)(E.g. - 1,6): " to REG_A
         write COLOR_NO to REG_B
         write SYS_CALL_PRINTLN to REG_D
         write OP_SYS_CALL to REG_OP
@@ -502,12 +566,6 @@ label main_loop
         cpu_exec
         copy REG_RES to var:player2_shots
 
-        // Increment Player 2's shot count
-        copy var:player2_shots_count to REG_A
-        write OP_INCR to REG_OP
-        cpu_exec
-        copy REG_RES to var:player2_shots_count
-
         // Check if Player 2 hit a ship on Player 1's battlefield
         copy var:player1_ships_cells to REG_A
         copy var:cell_coordinates to REG_B
@@ -517,13 +575,28 @@ label main_loop
         jump label:player2_miss
 
         label player2_hit
+            // Increment Player 2's hit count
+            copy var:player2_hits_count to REG_A
+            write OP_INCR to REG_OP
+            cpu_exec
+            copy REG_RES to var:player2_hits_count
+
             // Mark the hit cell with "r" (red)
             write "r" to var:cell
+
+            // Switch the hit switch
+            write 1 to var:hit_switch
+
+            write "You hit a ship!" to var:shot_message
             jump label:player2_shot_check_end
 
         label player2_miss
             // Mark the missed cell with "b" (blue)
             write "b" to var:cell
+            // Switch the hit switch
+            write 0 to var:hit_switch
+
+            write "You missed!" to var:shot_message
         label player2_shot_check_end
 
         // Update Player 1's battlefield bitmap with the shot result
@@ -570,6 +643,26 @@ label main_loop
         // Write the updated row back to RAM
         copy var:row to *var:row_RAM
 
+        // Render the updated bitmap
+        copy var:player1_bitmap_start to REG_A
+        copy var:player1_bitmap_end to REG_B
+        write SYS_CALL_RENDER_BITMAP to REG_D
+        write OP_SYS_CALL to REG_OP
+        cpu_exec
+
+        // Display the shot message
+        copy var:shot_message to REG_A
+        write COLOR_NO to REG_B
+        write SYS_CALL_PRINTLN to REG_D
+        write OP_SYS_CALL to REG_OP
+        cpu_exec
+
+        // Delay for 2 seconds to allow the player to read the message
+        write 2 to REG_A
+        write SYS_CALL_SLEEP to REG_D
+        write OP_SYS_CALL to REG_OP
+        cpu_exec
+
         jump label:turn_end
 
         label player2_reshot
@@ -581,7 +674,50 @@ label main_loop
             cpu_exec
             jump label:player2_reshot_end
 
+    // Check if Player 1 has won
+    label player1_win_cheak
+        // Check if Player 1 has sunk all Player 2's ships
+        copy var:all_ships_cells to REG_A
+        copy var:player1_hits_count to REG_B
+        write OP_CMP_EQ to REG_OP
+        cpu_exec
+        jump_if label:player1_win
+        jump label:win_cheak_end
 
+    // Check if Player 2 has won
+    label player2_win_cheak
+        // Check if Player 2 has sunk all Player 1's ships
+        copy var:all_ships_cells to REG_A
+        copy var:player2_hits_count to REG_B
+        write OP_CMP_EQ to REG_OP
+        cpu_exec
+        jump_if label:player2_win
+        jump label:win_cheak_end
+
+    // Display the winner message
+    label player1_win
+        write "Player 1 wins!" to REG_A
+        write COLOR_GREEN to REG_B
+        write SYS_CALL_PRINTLN to REG_D
+        write OP_SYS_CALL to REG_OP
+        cpu_exec
+        jump label:exit
+
+    label player2_win
+        write "Player 2 wins!" to REG_A
+        write COLOR_GREEN to REG_B
+        write SYS_CALL_PRINTLN to REG_D
+        write OP_SYS_CALL to REG_OP
+        cpu_exec
+        jump label:exit
+
+    // Switch the player
+    label player1_to_player2
+        write 2 to var:player
+        jump label:player_switch_end
+    label player2_to_player1    
+        write 1 to var:player
+        jump label:player_switch_end
 
 label exit
   write SYS_CALL_EXIT to REG_D
